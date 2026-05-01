@@ -117,7 +117,7 @@ if prompt := st.chat_input("Pregunta sobre sistemas embebidos..."):
     # Llamar a la API de Anthropic
     with st.chat_message("assistant"):
         with st.spinner("Procesando..."):
-            client = anthropic.Anthropic()
+            client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
             
             response = client.messages.create(
                 model="claude-sonnet-4-20250514",
