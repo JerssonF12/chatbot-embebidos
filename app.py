@@ -120,7 +120,7 @@ if prompt := st.chat_input("Pregunta sobre sistemas embebidos..."):
             client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
             
             response = client.messages.create(
-                model="claude-sonnet-4-5",
+                model="claude-haiku-4-5-20251001",
                 max_tokens=1024,
                 system=SYSTEM_PROMPT,
                 messages=[
