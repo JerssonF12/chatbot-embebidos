@@ -65,7 +65,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Encabezado
-st.markdown('<div class="main-title">⚡ Chatbot embebidor</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">⚡ Chatbot</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">// SISTEMAS EMBEBIDOS //</div>', unsafe_allow_html=True)
 
 # Temas iniciales
