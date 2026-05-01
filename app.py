@@ -1,14 +1,12 @@
 import streamlit as st
 import anthropic
 
-# Configuración de la página
 st.set_page_config(
-    page_title="EmbeddedBot 🤖",
+    page_title="Edith 🤖",
     page_icon="🔌",
     layout="centered"
 )
 
-# Estilos personalizados
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap');
@@ -67,23 +65,19 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Encabezado
-st.markdown('<div class="main-title">⚡ EmbeddedBot</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">// ASISTENTE DE SISTEMAS EMBEBIDOS //</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">⚡ Chatbot embebidor</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">// SISTEMAS EMBEBIDOS //</div>', unsafe_allow_html=True)
 
-# Temas sugeridos
+# Temas iniciales
 st.markdown("""
 <div style="text-align:center; margin-bottom: 1.5rem;">
     <span class="topic-chip">🔧 Microcontroladores</span>
-    <span class="topic-chip">📡 Protocolos I2C/SPI</span>
-    <span class="topic-chip">⚙️ RTOS</span>
     <span class="topic-chip">🔌 Arduino / ESP32</span>
-    <span class="topic-chip">💡 GPIO</span>
-    <span class="topic-chip">📟 UART</span>
 </div>
 """, unsafe_allow_html=True)
 
 # System prompt especializado
-SYSTEM_PROMPT = """Eres EmbeddedBot, un asistente experto en sistemas embebidos. 
+SYSTEM_PROMPT = """Eres Edith, un asistente experto en sistemas embebidos. 
 Tu conocimiento abarca:
 - Microcontroladores: PIC, AVR, ARM Cortex-M, ESP32, STM32, Arduino
 - Protocolos de comunicación: UART, SPI, I2C, CAN, USB, Ethernet
@@ -105,7 +99,7 @@ if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.messages.append({
         "role": "assistant",
-        "content": "¡Hola! Soy **EmbeddedBot** 🤖⚡\n\nEstoy aquí para ayudarte con todo lo relacionado a **sistemas embebidos**: microcontroladores, protocolos de comunicación, RTOS, programación en C, IoT y mucho más.\n\n¿Qué quieres aprender hoy?"
+        "content": "¡Hola! Soy **Edith** 🤖⚡\n\nEstoy aquí para ayudarte con todo lo relacionado a **sistemas embebidos**: microcontroladores, protocolos de comunicación, RTOS, programación en C, IoT y mucho más.\n\n¿Qué quieres aprender hoy?"
     })
 
 # Mostrar historial de mensajes
