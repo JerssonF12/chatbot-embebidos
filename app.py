@@ -1,12 +1,14 @@
 import streamlit as st
-import anthropic
+from groq import Groq
 
+# Configuración de la página
 st.set_page_config(
-    page_title="Edith 🤖",
+    page_title="EmbeddedBot 🤖",
     page_icon="🔌",
     layout="centered"
 )
 
+# Estilos personalizados
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700&display=swap');
@@ -45,11 +47,6 @@ st.markdown("""
         margin-bottom: 0.8rem !important;
     }
 
-    .stChatInputContainer {
-        border-top: 1px solid rgba(0, 212, 255, 0.2) !important;
-        padding-top: 1rem !important;
-    }
-
     .topic-chip {
         display: inline-block;
         background: rgba(0, 212, 255, 0.1);
@@ -65,19 +62,22 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Encabezado
-st.markdown('<div class="main-title">⚡ Chatbot</div>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">// SISTEMAS EMBEBIDOS //</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-title">⚡ EmbeddedBot</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">// ASISTENTE DE SISTEMAS EMBEBIDOS //</div>', unsafe_allow_html=True)
 
-# Temas iniciales
+# Temas sugeridos
 st.markdown("""
 <div style="text-align:center; margin-bottom: 1.5rem;">
     <span class="topic-chip">🔧 Microcontroladores</span>
+    <span class="topic-chip">📡 Protocolos I2C/SPI</span>
+    <span class="topic-chip">⚙️ RTOS</span>
     <span class="topic-chip">🔌 Arduino / ESP32</span>
+    <span class="topic-chip">💡 GPIO</span>
+    <span class="topic-chip">📟 UART</span>
 </div>
 """, unsafe_allow_html=True)
 
-# System prompt especializado
-SYSTEM_PROMPT = """Eres Edith, un asistente experto en sistemas embebidos. 
+SYSTEM_PROMPT = """Eres EmbeddedBot, un asistente experto en sistemas embebidos.
 Tu conocimiento abarca:
 - Microcontroladores: PIC, AVR, ARM Cortex-M, ESP32, STM32, Arduino
 - Protocolos de comunicación: UART, SPI, I2C, CAN, USB, Ethernet
@@ -89,47 +89,43 @@ Tu conocimiento abarca:
 - IoT y conectividad: MQTT, WiFi, Bluetooth, LoRa
 - Bootloaders, memoria flash, EEPROM, RAM
 
-Responde siempre en español, de forma clara, técnica pero accesible. 
+Responde siempre en español, de forma clara, técnica pero accesible.
 Cuando sea útil, incluye ejemplos de código en C o pseudocódigo.
 Si la pregunta no está relacionada con sistemas embebidos, redirige amablemente la conversación al tema.
 Usa emojis ocasionalmente para hacer las respuestas más amigables. 🔌"""
 
-# Inicializar historial
 if "messages" not in st.session_state:
     st.session_state.messages = []
     st.session_state.messages.append({
         "role": "assistant",
-        "content": "¡Hola! Soy **Edith** 🤖⚡\n\nEstoy aquí para ayudarte con todo lo relacionado a **sistemas embebidos**: microcontroladores, protocolos de comunicación, RTOS, programación en C, IoT y mucho más.\n\n¿Qué quieres aprender hoy?"
+        "content": "¡Hola! Soy **EmbeddedBot** 🤖⚡\n\nEstoy aquí para ayudarte con todo lo relacionado a **sistemas embebidos**: microcontroladores, protocolos de comunicación, RTOS, programación en C, IoT y mucho más.\n\n¿Qué quieres aprender hoy?"
     })
 
-# Mostrar historial de mensajes
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Input del usuario
 if prompt := st.chat_input("Pregunta sobre sistemas embebidos..."):
-    # Agregar mensaje del usuario
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # Llamar a la API de Anthropic
     with st.chat_message("assistant"):
         with st.spinner("Procesando..."):
-            client = anthropic.Anthropic(api_key=st.secrets["ANTHROPIC_API_KEY"])
-            
-            response = client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=1024,
-                system=SYSTEM_PROMPT,
+            client = Groq(api_key=st.secrets["GROQ_API_KEY"])
+
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
                 messages=[
-                    {"role": m["role"], "content": m["content"]}
-                    for m in st.session_state.messages
-                ]
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    *[{"role": m["role"], "content": m["content"]}
+                      for m in st.session_state.messages]
+                ],
+                max_tokens=1024,
+                temperature=0.7
             )
-            
-            assistant_response = response.content[0].text
+
+            assistant_response = response.choices[0].message.content
             st.markdown(assistant_response)
-    
+
     st.session_state.messages.append({"role": "assistant", "content": assistant_response})
